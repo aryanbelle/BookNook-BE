@@ -24,10 +24,24 @@ const app = express();
 app.use(express.json());
 
 // Enable CORS with proper configuration
-app.use(cors({
-  origin: true,
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://book-nook-zeta.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
-}));
+};
+
+app.options('*', cors(corsOptions)); // Preflight handling
+app.use(cors(corsOptions));         // Main CORS middleware
 
 
 // Dev logging middleware
