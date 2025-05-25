@@ -18,36 +18,39 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes = require('./routes/userRoutes');
 const bodyParser = require("body-parser");
 
-const allowedOrigins = [
-  'https://book-nook-zeta.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:3000'
-];
+// Allow all origins for now to test CORS
+const allowedOrigins = ['*'];
+
+// Log all incoming requests for debugging
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.path}`);
+  console.log('Origin:', req.headers.origin);
+  console.log('Headers:', req.headers);
+  next();
+});
 
 const app = express();
 
 // Body parser
 app.use(express.json());
 
-// Enable CORS with proper configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+// Enable CORS with permissive settings
+app.use(cors({
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
+  credentials: true,
+  optionsSuccessStatus: 204
+}));
 
 // Handle preflight requests
-app.options('*', cors(corsOptions));
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.status(204).end();
+});
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
