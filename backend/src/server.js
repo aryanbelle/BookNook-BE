@@ -18,12 +18,6 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes = require('./routes/userRoutes');
 const bodyParser = require("body-parser");
 
-const allowedOrigins = [
-  'https://book-nook-zeta.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:3000'
-];
-
 const app = express();
 
 // Body parser
@@ -31,15 +25,10 @@ app.use(express.json());
 
 // Enable CORS with proper configuration
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true, // optional if you're using cookies/auth headers
+  origin: true,
+  credentials: true
 }));
+
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
