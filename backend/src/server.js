@@ -18,16 +18,18 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes = require('./routes/userRoutes');
 const bodyParser = require("body-parser");
 
-const allowedOrigins = ['https://book-nook-zeta.vercel.app'];
+const allowedOrigins = [
+  'https://book-nook-zeta.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
 
 const app = express();
-
-router.use(bodyParser.json());
 
 // Body parser
 app.use(express.json());
 
-// Enable CORS
+// Enable CORS with proper configuration
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
