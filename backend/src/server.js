@@ -17,13 +17,24 @@ const bookRoutes = require('./routes/bookRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes = require('./routes/userRoutes');
 
+const allowedOrigins = ['https://book-nook-zeta.vercel.app'];
+
 const app = express();
 
 // Body parser
 app.use(express.json());
 
 // Enable CORS
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // optional if you're using cookies/auth headers
+}));
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
