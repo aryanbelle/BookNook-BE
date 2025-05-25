@@ -20,6 +20,7 @@ const bodyParser = require("body-parser");
 
 // Allow all origins for now to test CORS
 const allowedOrigins = ['*'];
+const app = express();
 
 // Log all incoming requests for debugging
 app.use((req, res, next) => {
@@ -29,7 +30,6 @@ app.use((req, res, next) => {
   next();
 });
 
-const app = express();
 
 // Body parser
 app.use(express.json());
