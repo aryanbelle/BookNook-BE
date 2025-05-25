@@ -16,10 +16,13 @@ const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes = require('./routes/userRoutes');
+const bodyParser = require("body-parser");
 
 const allowedOrigins = ['https://book-nook-zeta.vercel.app'];
 
 const app = express();
+
+router.use(bodyParser.json());
 
 // Body parser
 app.use(express.json());
